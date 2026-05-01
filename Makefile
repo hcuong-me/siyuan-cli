@@ -1,6 +1,6 @@
 .PHONY: build test lint clean install
 
-BINARY_NAME := siyuan
+BINARY_NAME := siyuan-cli
 BUILD_DIR := ./dist
 MAIN_PACKAGE := ./cmd/siyuan
 

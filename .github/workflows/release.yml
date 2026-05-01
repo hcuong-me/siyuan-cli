@@ -48,14 +48,14 @@ jobs:
           GOOS: ${{ matrix.os }}
           GOARCH: ${{ matrix.arch }}
         run: |
-          output_name="siyuan-${{ matrix.os }}-${{ matrix.arch }}${{ matrix.ext }}"
+          output_name="siyuan-cli-${{ matrix.os }}-${{ matrix.arch }}${{ matrix.ext }}"
           go build -ldflags="-X siyuan/internal/cmd.version=${{ env.VERSION }}" -o "dist/${output_name}" ./cmd/siyuan
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: siyuan-${{ matrix.os }}-${{ matrix.arch }}
-          path: dist/siyuan-${{ matrix.os }}-${{ matrix.arch }}${{ matrix.ext }}
+          name: siyuan-cli-${{ matrix.os }}-${{ matrix.arch }}
+          path: dist/siyuan-cli-${{ matrix.os }}-${{ matrix.arch }}${{ matrix.ext }}
 
   release:
     name: Create Release
@@ -72,7 +72,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: dist
-          pattern: siyuan-*
+          pattern: siyuan-cli-*
 
       - name: Flatten artifacts
         run: |
@@ -84,7 +84,7 @@ jobs:
         id: checksums
         run: |
           cd release
-          for file in siyuan-darwin-*; do
+          for file in siyuan-cli-darwin-*; do
             shasum -a 256 "$file" > "${file}.sha256"
           done
           ls -la
@@ -94,7 +94,7 @@ jobs:
         with:
           name: Release ${{ github.ref_name }}
           files: |
-            release/siyuan-*
+            release/siyuan-cli-*
           generate_release_notes: true
 
       - name: Upload checksums artifact
@@ -129,8 +129,8 @@ jobs:
       - name: Extract SHA256 values
         id: sha256
         run: |
-          AMD64_SHA=$(cat checksums/siyuan-darwin-amd64.sha256 | awk '{print $1}')
-          ARM64_SHA=$(cat checksums/siyuan-darwin-arm64.sha256 | awk '{print $1}')
+          AMD64_SHA=$(cat checksums/siyuan-cli-darwin-amd64.sha256 | awk '{print $1}')
+          ARM64_SHA=$(cat checksums/siyuan-cli-darwin-arm64.sha256 | awk '{print $1}')
           echo "AMD64_SHA=$AMD64_SHA" >> $GITHUB_ENV
           echo "ARM64_SHA=$ARM64_SHA" >> $GITHUB_ENV
           echo "amd64: $AMD64_SHA"
@@ -153,26 +153,26 @@ jobs:
 
             on_macos do
               on_arm do
-                url "https://github.com/hcuong-me/siyuan-cli/releases/download/v${{ env.VERSION }}/siyuan-darwin-arm64"
+                url "https://github.com/hcuong-me/siyuan-cli/releases/download/v${{ env.VERSION }}/siyuan-cli-darwin-arm64"
                 sha256 "${{ env.ARM64_SHA }}"
               end
 
               on_intel do
-                url "https://github.com/hcuong-me/siyuan-cli/releases/download/v${{ env.VERSION }}/siyuan-darwin-amd64"
+                url "https://github.com/hcuong-me/siyuan-cli/releases/download/v${{ env.VERSION }}/siyuan-cli-darwin-amd64"
                 sha256 "${{ env.AMD64_SHA }}"
               end
             end
 
             def install
               if Hardware::CPU.arm?
-                bin.install "siyuan-darwin-arm64" => "siyuan"
+                bin.install "siyuan-cli-darwin-arm64" => "siyuan-cli"
               else
-                bin.install "siyuan-darwin-amd64" => "siyuan"
+                bin.install "siyuan-cli-darwin-amd64" => "siyuan-cli"
               end
             end
 
             test do
-              system "#{bin}/siyuan", "--version"
+              system "#{bin}/siyuan-cli", "--version"
             end
           end
           EOF

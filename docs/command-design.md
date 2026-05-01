@@ -8,9 +8,9 @@ This document maps CLI commands to their corresponding SiYuan API endpoints.
 
 | CLI Command | API Endpoint | Description |
 |-------------|--------------|-------------|
-| `siyuan system version` | `POST /api/system/version` | Get SiYuan kernel version |
-| `siyuan system time` | `POST /api/system/currentTime` | Get current system time |
-| `siyuan system boot-progress` | `POST /api/system/bootProgress` | Get kernel boot progress |
+| `siyuan-cli system version` | `POST /api/system/version` | Get SiYuan kernel version |
+| `siyuan-cli system time` | `POST /api/system/currentTime` | Get current system time |
+| `siyuan-cli system boot-progress` | `POST /api/system/bootProgress` | Get kernel boot progress |
 
 ---
 
@@ -18,13 +18,13 @@ This document maps CLI commands to their corresponding SiYuan API endpoints.
 
 | CLI Command | API Endpoint | Description |
 |-------------|--------------|-------------|
-| `siyuan notebook list` | `POST /api/notebook/lsNotebooks` | List all notebooks |
-| `siyuan notebook get --id <id>` | `POST /api/notebook/getNotebookConf` | Get notebook configuration |
-| `siyuan notebook create --name <name>` | `POST /api/notebook/createNotebook` | Create new notebook |
-| `siyuan notebook rename --id <id> --name <name>` | `POST /api/notebook/renameNotebook` | Rename notebook |
-| `siyuan notebook remove --id <id> --yes` | `POST /api/notebook/removeNotebook` | Remove notebook |
-| `siyuan notebook open --id <id>` | `POST /api/notebook/openNotebook` | Open closed notebook |
-| `siyuan notebook close --id <id>` | `POST /api/notebook/closeNotebook` | Close open notebook |
+| `siyuan-cli notebook list` | `POST /api/notebook/lsNotebooks` | List all notebooks |
+| `siyuan-cli notebook get --id <id>` | `POST /api/notebook/getNotebookConf` | Get notebook configuration |
+| `siyuan-cli notebook create --name <name>` | `POST /api/notebook/createNotebook` | Create new notebook |
+| `siyuan-cli notebook rename --id <id> --name <name>` | `POST /api/notebook/renameNotebook` | Rename notebook |
+| `siyuan-cli notebook remove --id <id> --yes` | `POST /api/notebook/removeNotebook` | Remove notebook |
+| `siyuan-cli notebook open --id <id>` | `POST /api/notebook/openNotebook` | Open closed notebook |
+| `siyuan-cli notebook close --id <id>` | `POST /api/notebook/closeNotebook` | Close open notebook |
 
 ---
 
@@ -32,12 +32,12 @@ This document maps CLI commands to their corresponding SiYuan API endpoints.
 
 | CLI Command | API Endpoint | Description |
 |-------------|--------------|-------------|
-| `siyuan doc list <notebook>` | `POST /api/filetree/listDocTree` | List document tree |
-| `siyuan doc get --path <path>` | `POST /api/export/exportMdContent` | Get document as Markdown |
-| `siyuan doc create --path <path> --content <md>` | `POST /api/filetree/createDocWithMd` | Create document from Markdown |
-| `siyuan doc rename --old-path <path> --new-path <path>` | `POST /api/filetree/renameDoc` | Rename document |
-| `siyuan doc move --old-path <path> --new-path <path>` | `POST /api/filetree/moveDocs` | Move document |
-| `siyuan doc remove --path <path> --yes` | `POST /api/filetree/removeDoc` | Remove document |
+| `siyuan-cli doc list <notebook>` | `POST /api/filetree/listDocTree` | List document tree |
+| `siyuan-cli doc get --path <path>` | `POST /api/export/exportMdContent` | Get document as Markdown |
+| `siyuan-cli doc create --path <path> --content <md>` | `POST /api/filetree/createDocWithMd` | Create document from Markdown |
+| `siyuan-cli doc rename --old-path <path> --new-path <path>` | `POST /api/filetree/renameDoc` | Rename document |
+| `siyuan-cli doc move --old-path <path> --new-path <path>` | `POST /api/filetree/moveDocs` | Move document |
+| `siyuan-cli doc remove --path <path> --yes` | `POST /api/filetree/removeDoc` | Remove document |
 
 **Note:** Rename/remove by ID uses `/api/filetree/renameDocByID` and `/api/filetree/removeDocByID`
 
@@ -47,11 +47,11 @@ This document maps CLI commands to their corresponding SiYuan API endpoints.
 
 | CLI Command | API Endpoint | Description |
 |-------------|--------------|-------------|
-| `siyuan block get --id <id>` | `POST /api/block/getBlockKramdown` | Get block kramdown |
-| `siyuan block children --id <id>` | `POST /api/block/getChildBlocks` | Get child blocks |
-| `siyuan block update --id <id> --content <md>` | `POST /api/block/updateBlock` | Update block content |
-| `siyuan block insert --parent-id <id> --content <md>` | `POST /api/block/insertBlock` | Insert new block |
-| `siyuan block remove --id <id> --yes` | `POST /api/block/deleteBlock` | Delete block |
+| `siyuan-cli block get --id <id>` | `POST /api/block/getBlockKramdown` | Get block kramdown |
+| `siyuan-cli block children --id <id>` | `POST /api/block/getChildBlocks` | Get child blocks |
+| `siyuan-cli block update --id <id> --content <md>` | `POST /api/block/updateBlock` | Update block content |
+| `siyuan-cli block insert --parent-id <id> --content <md>` | `POST /api/block/insertBlock` | Insert new block |
+| `siyuan-cli block remove --id <id> --yes` | `POST /api/block/deleteBlock` | Delete block |
 
 ---
 
@@ -59,8 +59,8 @@ This document maps CLI commands to their corresponding SiYuan API endpoints.
 
 | CLI Command | API Endpoint | Description |
 |-------------|--------------|-------------|
-| `siyuan search block <keyword>` | `POST /api/search/fullTextSearchBlock` | Full-text search blocks |
-| `siyuan search doc <keyword>` | `POST /api/filetree/searchDocs` | Search documents |
+| `siyuan-cli search block <keyword>` | `POST /api/search/fullTextSearchBlock` | Full-text search blocks |
+| `siyuan-cli search doc <keyword>` | `POST /api/filetree/searchDocs` | Search documents |
 
 ---
 
@@ -68,7 +68,7 @@ This document maps CLI commands to their corresponding SiYuan API endpoints.
 
 | CLI Command | API Endpoint | Description |
 |-------------|--------------|-------------|
-| `siyuan sql query <statement>` | `POST /api/query/sql` | Execute SQL query (SELECT only) |
+| `siyuan-cli sql query <statement>` | `POST /api/query/sql` | Execute SQL query (SELECT only) |
 
 ---
 
@@ -76,9 +76,9 @@ This document maps CLI commands to their corresponding SiYuan API endpoints.
 
 | CLI Command | API Endpoint | Description |
 |-------------|--------------|-------------|
-| `siyuan tag list` | `POST /api/tag/getTag` | List all tags |
-| `siyuan tag search <keyword>` | `POST /api/search/searchTag` | Search tags |
-| `siyuan tag docs --label <tag>` | `POST /api/tag/getTag` + filter | Get documents by tag |
+| `siyuan-cli tag list` | `POST /api/tag/getTag` | List all tags |
+| `siyuan-cli tag search <keyword>` | `POST /api/search/searchTag` | Search tags |
+| `siyuan-cli tag docs --label <tag>` | `POST /api/tag/getTag` + filter | Get documents by tag |
 
 ---
 
@@ -86,10 +86,10 @@ This document maps CLI commands to their corresponding SiYuan API endpoints.
 
 | CLI Command | API Endpoint | Description |
 |-------------|--------------|-------------|
-| `siyuan attr list` | `POST /api/attr/getBlockAttrs` (multiple) | List all attributes |
-| `siyuan attr get --id <id>` | `POST /api/attr/getBlockAttrs` | Get block attributes |
-| `siyuan attr set --id <id> --key <k> --value <v>` | `POST /api/attr/setBlockAttrs` | Set block attribute |
-| `siyuan attr reset --id <id> --key <k>` | `POST /api/attr/setBlockAttrs` (empty value) | Reset attribute |
+| `siyuan-cli attr list` | `POST /api/attr/getBlockAttrs` (multiple) | List all attributes |
+| `siyuan-cli attr get --id <id>` | `POST /api/attr/getBlockAttrs` | Get block attributes |
+| `siyuan-cli attr set --id <id> --key <k> --value <v>` | `POST /api/attr/setBlockAttrs` | Set block attribute |
+| `siyuan-cli attr reset --id <id> --key <k>` | `POST /api/attr/setBlockAttrs` (empty value) | Reset attribute |
 
 ---
 
@@ -97,11 +97,11 @@ This document maps CLI commands to their corresponding SiYuan API endpoints.
 
 | CLI Command | API Endpoint | Description |
 |-------------|--------------|-------------|
-| `siyuan export preview <id>` | `POST /api/export/exportMdContent` | Preview document |
-| `siyuan export markdown <id>` | `POST /api/export/exportMdContent` | Export as Markdown |
-| `siyuan export html <id>` | `POST /api/export/exportHTML` | Export as HTML |
-| `siyuan export pdf <id>` | `POST /api/export/exportPDF` | Export as PDF (server-side) |
-| `siyuan export docx <id>` | `POST /api/export/exportDocx` | Export as DOCX (server-side) |
+| `siyuan-cli export preview <id>` | `POST /api/export/exportMdContent` | Preview document |
+| `siyuan-cli export markdown <id>` | `POST /api/export/exportMdContent` | Export as Markdown |
+| `siyuan-cli export html <id>` | `POST /api/export/exportHTML` | Export as HTML |
+| `siyuan-cli export pdf <id>` | `POST /api/export/exportPDF` | Export as PDF (server-side) |
+| `siyuan-cli export docx <id>` | `POST /api/export/exportDocx` | Export as DOCX (server-side) |
 
 ---
 
@@ -109,10 +109,10 @@ This document maps CLI commands to their corresponding SiYuan API endpoints.
 
 | CLI Command | API Endpoint | Description |
 |-------------|--------------|-------------|
-| `siyuan template list` | `POST /api/file/readDir` (path: `/data/templates`) | List templates |
-| `siyuan template get <path>` | `POST /api/file/getFile` | Get template content |
-| `siyuan template render <path> --id <doc-id>` | `POST /api/template/render` | Render template to document |
-| `siyuan template remove <path> --yes` | `POST /api/file/removeFile` | Remove template |
+| `siyuan-cli template list` | `POST /api/file/readDir` (path: `/data/templates`) | List templates |
+| `siyuan-cli template get <path>` | `POST /api/file/getFile` | Get template content |
+| `siyuan-cli template render <path> --id <doc-id>` | `POST /api/template/render` | Render template to document |
+| `siyuan-cli template remove <path> --yes` | `POST /api/file/removeFile` | Remove template |
 
 ---
 
@@ -120,11 +120,11 @@ This document maps CLI commands to their corresponding SiYuan API endpoints.
 
 | CLI Command | API Endpoint | Description |
 |-------------|--------------|-------------|
-| `siyuan snapshot list` | `POST /api/repo/getRepoSnapshots` | List all snapshots |
-| `siyuan snapshot current` | `POST /api/repo/getRepoSnapshot` | Get current snapshot |
-| `siyuan snapshot create --memo <memo>` | `POST /api/repo/createRepoSnapshot` | Create snapshot |
-| `siyuan snapshot restore <id> --yes` | `POST /api/repo/checkoutRepo` | Restore to snapshot |
-| `siyuan snapshot remove <id> --yes` | `POST /api/repo/removeRepoSnapshot` | Remove snapshot |
+| `siyuan-cli snapshot list` | `POST /api/repo/getRepoSnapshots` | List all snapshots |
+| `siyuan-cli snapshot current` | `POST /api/repo/getRepoSnapshot` | Get current snapshot |
+| `siyuan-cli snapshot create --memo <memo>` | `POST /api/repo/createRepoSnapshot` | Create snapshot |
+| `siyuan-cli snapshot restore <id> --yes` | `POST /api/repo/checkoutRepo` | Restore to snapshot |
+| `siyuan-cli snapshot remove <id> --yes` | `POST /api/repo/removeRepoSnapshot` | Remove snapshot |
 
 ---
 
@@ -132,9 +132,9 @@ This document maps CLI commands to their corresponding SiYuan API endpoints.
 
 | CLI Command | API Endpoint | Description |
 |-------------|--------------|-------------|
-| `siyuan asset upload <file>` | `POST /api/asset/upload` | Upload asset file |
-| `siyuan asset unused` | `POST /api/asset/getUnusedAssets` | List unused assets |
-| `siyuan asset clean --yes` | `POST /api/asset/removeUnusedAssets` | Remove unused assets |
+| `siyuan-cli asset upload <file>` | `POST /api/asset/upload` | Upload asset file |
+| `siyuan-cli asset unused` | `POST /api/asset/getUnusedAssets` | List unused assets |
+| `siyuan-cli asset clean --yes` | `POST /api/asset/removeUnusedAssets` | Remove unused assets |
 
 ---
 
@@ -142,12 +142,12 @@ This document maps CLI commands to their corresponding SiYuan API endpoints.
 
 | CLI Command | API Endpoint | Description |
 |-------------|--------------|-------------|
-| `siyuan file tree <path>` | `POST /api/file/readDir` | List directory contents |
-| `siyuan file read <path>` | `POST /api/file/getFile` | Read file content |
-| `siyuan file write <path> --content <text>` | `POST /api/file/putFile` | Write file content |
-| `siyuan file mkdir <path>` | `POST /api/file/putFile` (isDir: true) | Create directory |
-| `siyuan file remove <path> --yes` | `POST /api/file/removeFile` | Remove file/directory |
-| `siyuan file rename <old> <new>` | `POST /api/file/renameFile` | Rename/move file |
+| `siyuan-cli file tree <path>` | `POST /api/file/readDir` | List directory contents |
+| `siyuan-cli file read <path>` | `POST /api/file/getFile` | Read file content |
+| `siyuan-cli file write <path> --content <text>` | `POST /api/file/putFile` | Write file content |
+| `siyuan-cli file mkdir <path>` | `POST /api/file/putFile` (isDir: true) | Create directory |
+| `siyuan-cli file remove <path> --yes` | `POST /api/file/removeFile` | Remove file/directory |
+| `siyuan-cli file rename <old> <new>` | `POST /api/file/renameFile` | Rename/move file |
 
 ---
 

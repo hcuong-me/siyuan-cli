@@ -1,0 +1,175 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Binaries
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - os: darwin
+            arch: amd64
+            ext: ''
+          - os: darwin
+            arch: arm64
+            ext: ''
+          - os: linux
+            arch: amd64
+            ext: ''
+          - os: linux
+            arch: arm64
+            ext: ''
+          - os: windows
+            arch: amd64
+            ext: '.exe'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+
+      - name: Get version
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Build binary
+        env:
+          GOOS: ${{ matrix.os }}
+          GOARCH: ${{ matrix.arch }}
+        run: |
+          output_name="siyuan-${{ matrix.os }}-${{ matrix.arch }}${{ matrix.ext }}"
+          go build -ldflags="-X siyuan/internal/cmd.version=${{ env.VERSION }}" -o "dist/${output_name}" ./cmd/siyuan
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: siyuan-${{ matrix.os }}-${{ matrix.arch }}
+          path: dist/siyuan-${{ matrix.os }}-${{ matrix.arch }}${{ matrix.ext }}
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get version
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          pattern: siyuan-*
+
+      - name: Flatten artifacts
+        run: |
+          mkdir -p release
+          find dist -type f -exec cp {} release/ \;
+          ls -la release/
+
+      - name: Calculate SHA256 checksums
+        id: checksums
+        run: |
+          cd release
+          for file in siyuan-darwin-*; do
+            shasum -a 256 "$file" > "${file}.sha256"
+          done
+          ls -la
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release ${{ github.ref_name }}
+          files: |
+            release/siyuan-*
+          generate_release_notes: true
+
+      - name: Upload checksums artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: checksums
+          path: release/*.sha256
+
+  update-homebrew:
+    name: Update Homebrew Formula
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get version
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Download checksums
+        uses: actions/download-artifact@v4
+        with:
+          name: checksums
+          path: checksums
+
+      - name: Extract SHA256 values
+        id: sha256
+        run: |
+          AMD64_SHA=$(cat checksums/siyuan-darwin-amd64.sha256 | awk '{print $1}')
+          ARM64_SHA=$(cat checksums/siyuan-darwin-arm64.sha256 | awk '{print $1}')
+          echo "AMD64_SHA=$AMD64_SHA" >> $GITHUB_ENV
+          echo "ARM64_SHA=$ARM64_SHA" >> $GITHUB_ENV
+          echo "amd64: $AMD64_SHA"
+          echo "arm64: $ARM64_SHA"
+
+      - name: Checkout homebrew-tap
+        uses: actions/checkout@v4
+        with:
+          repository: hcuong-me/homebrew-siyuan-cli
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          path: homebrew-tap
+
+      - name: Update formula
+        run: |
+          cat > homebrew-tap/siyuan-cli.rb << 'EOF'
+          class SiyuanCli < Formula
+            desc "CLI for SiYuan Note"
+            homepage "https://github.com/hcuong-me/siyuan-cli"
+            version "${{ env.VERSION }}"
+
+            on_macos do
+              on_arm do
+                url "https://github.com/hcuong-me/siyuan-cli/releases/download/v${{ env.VERSION }}/siyuan-darwin-arm64"
+                sha256 "${{ env.ARM64_SHA }}"
+              end
+
+              on_intel do
+                url "https://github.com/hcuong-me/siyuan-cli/releases/download/v${{ env.VERSION }}/siyuan-darwin-amd64"
+                sha256 "${{ env.AMD64_SHA }}"
+              end
+            end
+
+            def install
+              bin.install "siyuan" => "siyuan-cli"
+            end
+
+            test do
+              system "#{bin}/siyuan-cli", "--version"
+            end
+          end
+          EOF
+
+      - name: Commit and push formula
+        run: |
+          cd homebrew-tap
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add siyuan-cli.rb
+          git commit -m "Bump siyuan-cli to v${{ env.VERSION }}"
+          git push

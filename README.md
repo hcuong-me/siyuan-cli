@@ -55,6 +55,19 @@ siyuan --help
 
 Download from [GitHub Releases](https://github.com/hcuong-me/siyuan-cli/releases).
 
+### Homebrew (macOS)
+
+```bash
+brew tap hcuong-me/siyuan-cli
+brew install siyuan-cli
+```
+
+Or in one line:
+
+```bash
+brew install hcuong-me/siyuan-cli/siyuan-cli
+```
+
 ## Requirements
 
 - Go >= 1.24 (for `go install`) or a pre-built binary

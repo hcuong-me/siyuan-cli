@@ -24,6 +24,3 @@ formatters:
     goimports:
       local-prefixes:
         - siyuan
-
-issues:
-  exclude-use-default: false

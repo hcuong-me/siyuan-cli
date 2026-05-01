@@ -30,19 +30,19 @@ func (c *Client) GetTags(ctx context.Context) ([]Tag, error) {
 
 // TagSearchResult represents the search result for tags.
 type TagSearchResult struct {
-	K       string   `json:"k"`
-	Tags    []string `json:"tags"`
-	Blocks  []BlockResult `json:"blocks,omitempty"`
+	K      string        `json:"k"`
+	Tags   []string      `json:"tags"`
+	Blocks []BlockResult `json:"blocks,omitempty"`
 }
 
 // BlockResult represents a block in search results.
 type BlockResult struct {
-	BlockID     string `json:"blockID"`
-	Content     string `json:"content"`
-	RootID      string `json:"rootID"`
-	HPath       string `json:"hPath"`
-	Updated     string `json:"updated"`
-	Created     string `json:"created"`
+	BlockID string `json:"blockID"`
+	Content string `json:"content"`
+	RootID  string `json:"rootID"`
+	HPath   string `json:"hPath"`
+	Updated string `json:"updated"`
+	Created string `json:"created"`
 }
 
 // SearchTags searches for blocks with specific tags.

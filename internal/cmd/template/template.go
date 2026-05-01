@@ -16,7 +16,7 @@ func NewListCmd() *cobra.Command {
 		Use:   "list",
 		Short: "List all templates",
 		Long:  "List all available template files in the templates directory.",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			l, err := logic.NewTemplateLogic()
 			if err != nil {
 				return err

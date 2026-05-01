@@ -63,10 +63,10 @@ func normalizeQuery(query string) string {
 	query = regexp.MustCompile("--[^\n]*").ReplaceAllString(query, "")
 
 	// Remove multi-line comments (/* ... */)
-	query = regexp.MustCompile("/\\*.*?\\*/").ReplaceAllString(query, "")
+	query = regexp.MustCompile(`\/\*.*?\*\/`).ReplaceAllString(query, "")
 
 	// Normalize whitespace
-	query = regexp.MustCompile("\\s+").ReplaceAllString(query, " ")
+	query = regexp.MustCompile(`\s+`).ReplaceAllString(query, " ")
 
 	return strings.TrimSpace(query)
 }

@@ -39,7 +39,7 @@ func NewListCmd() *cobra.Command {
 		Use:   "list",
 		Short: "List all snapshots",
 		Long:  "List all repository snapshots.",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			l, err := logic.NewSnapshotLogic()
 			if err != nil {
 				return err
@@ -81,7 +81,7 @@ func NewCurrentCmd() *cobra.Command {
 		Use:   "current",
 		Short: "Show current snapshot",
 		Long:  "Show information about the current repository snapshot.",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			l, err := logic.NewSnapshotLogic()
 			if err != nil {
 				return err
@@ -123,7 +123,7 @@ Examples:
   siyuan snapshot create
   siyuan snapshot create --memo "before major update"
   siyuan snapshot create --memo "backup-$(date +%Y%m%d)"`,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			l, err := logic.NewSnapshotLogic()
 			if err != nil {
 				return err

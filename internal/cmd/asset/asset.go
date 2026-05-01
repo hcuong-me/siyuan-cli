@@ -94,7 +94,7 @@ Use "siyuan asset clean" to remove all unused assets at once.
 Examples:
   siyuan asset unused
   siyuan asset unused --json`,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			l, err := logic.NewAssetLogic()
 			if err != nil {
 				return err
@@ -144,7 +144,7 @@ WARNING: This operation cannot be undone. The files will be permanently deleted.
 
 Examples:
   siyuan asset clean --yes`,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			if !yes {
 				return fmt.Errorf("use --yes to confirm cleanup (this will permanently delete unused assets)")
 			}

@@ -71,7 +71,7 @@ func NewSetCmd() *cobra.Command {
 	}
 	cmd.Flags().StringVar(&key, "key", "", "Attribute key (required)")
 	cmd.Flags().StringVar(&value, "value", "", "Attribute value")
-	cmd.MarkFlagRequired("key")
+	_ = cmd.MarkFlagRequired("key")
 	return cmd
 }
 
@@ -142,7 +142,7 @@ func NewResetCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&key, "key", "", "Attribute key to remove (required)")
-	cmd.MarkFlagRequired("key")
+	_ = cmd.MarkFlagRequired("key")
 	return cmd
 }
 
@@ -151,7 +151,7 @@ func NewBookmarksCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "bookmarks",
 		Short: "List all bookmark labels",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			l, err := logic.NewAttrLogic()
 			if err != nil {
 				return err

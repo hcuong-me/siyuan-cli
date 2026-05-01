@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"siyuan/internal/cmd/asset"
 	"siyuan/internal/cmd/attr"
 	"siyuan/internal/cmd/block"
 	"siyuan/internal/cmd/doc"
@@ -13,12 +14,11 @@ import (
 	siyfile "siyuan/internal/cmd/file"
 	"siyuan/internal/cmd/notebook"
 	"siyuan/internal/cmd/search"
-	sqlcmd "siyuan/internal/cmd/sql"
 	"siyuan/internal/cmd/snapshot"
+	sqlcmd "siyuan/internal/cmd/sql"
 	"siyuan/internal/cmd/system"
 	"siyuan/internal/cmd/tag"
 	"siyuan/internal/cmd/template"
-	"siyuan/internal/cmd/asset"
 	"siyuan/internal/utils/output"
 )
 

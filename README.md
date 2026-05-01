@@ -201,6 +201,8 @@ This builds binaries for darwin/amd64, darwin/arm64, linux/amd64, linux/arm64, a
 
 ## Contributing
 
+See [CI/CD Setup Guide](docs/CI_CD_SETUP.md) for configuring GitHub Actions and releases.
+
 Contributions are welcome. Please follow these steps:
 
 1. Fork the repository

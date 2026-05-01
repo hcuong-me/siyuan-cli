@@ -15,7 +15,7 @@ func NewListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "list",
 		Short: "List all tags",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			l, err := logic.NewTagLogic()
 			if err != nil {
 				return err
@@ -77,7 +77,7 @@ func NewDocsCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "docs",
 		Short: "Get documents with a specific tag",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			if label == "" {
 				return fmt.Errorf("--label is required")
 			}
@@ -112,7 +112,7 @@ func NewRenameCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "rename",
 		Short: "Rename a tag",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			if oldLabel == "" || newLabel == "" {
 				return fmt.Errorf("both --old and --new are required")
 			}
@@ -143,7 +143,7 @@ func NewRemoveCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "remove",
 		Short: "Remove a tag",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			if label == "" {
 				return fmt.Errorf("--label is required")
 			}

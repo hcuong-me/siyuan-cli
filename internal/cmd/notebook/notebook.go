@@ -15,7 +15,7 @@ func NewListCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "list",
 		Short: "List all notebooks",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			l, err := logic.NewNotebookLogic()
 			if err != nil {
 				return err

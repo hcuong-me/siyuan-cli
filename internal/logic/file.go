@@ -108,7 +108,7 @@ func ValidateFilePath(path string) error {
 		return fmt.Errorf("path is required")
 	}
 	if strings.Contains(path, "..") {
-		return fmt.Errorf("path cannot contain ..")
+		return fmt.Errorf("path cannot contain parent directory references")
 	}
 	return nil
 }

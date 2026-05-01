@@ -1,25 +1,29 @@
+version: "2"
+
 run:
   timeout: 5m
 
 linters:
+  default: none
   enable:
     - errcheck
-    - gosimple
     - govet
     - ineffassign
     - staticcheck
-    - typecheck
     - unused
-    - gofmt
-    - goimports
     - misspell
     - revive
 
-linters-settings:
-  gofmt:
-    simplify: true
-  goimports:
-    local-prefixes: siyuan
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    gofmt:
+      simplify: true
+    goimports:
+      local-prefixes:
+        - siyuan
 
 issues:
   exclude-use-default: false

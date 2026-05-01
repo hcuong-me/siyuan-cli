@@ -94,7 +94,7 @@ func (l *ExportLogic) ExportDocx(ctx context.Context, docID, outputPath string) 
 }
 
 // ExportNotebook exports a notebook as Markdown.
-func (l *ExportLogic) ExportNotebook(ctx context.Context, notebookID, outputDir string) error {
+func (l *ExportLogic) ExportNotebook(_ context.Context, _, _ string) error {
 	// This would require iterating through all documents in the notebook
 	// and exporting them. For now, this is a placeholder.
 	return fmt.Errorf("notebook export not yet implemented")

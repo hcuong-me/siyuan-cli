@@ -10,10 +10,10 @@ import (
 
 // DocumentInfo represents a document with full information.
 type DocumentInfo struct {
-	ID       string           `json:"id"`
-	Name     string           `json:"name"`
-	Path     string           `json:"path"`
-	Children []DocumentInfo   `json:"children,omitempty"`
+	ID       string         `json:"id"`
+	Name     string         `json:"name"`
+	Path     string         `json:"path"`
+	Children []DocumentInfo `json:"children,omitempty"`
 }
 
 // DocumentLogic handles document business logic.

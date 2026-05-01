@@ -91,7 +91,7 @@ func NewGetCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&path, "path", "", "Document path (required)")
-	cmd.MarkFlagRequired("path")
+	_ = cmd.MarkFlagRequired("path")
 	return cmd
 }
 
@@ -133,7 +133,7 @@ func NewCreateCmd() *cobra.Command {
 	cmd.Flags().StringVar(&path, "path", "", "Document path (required)")
 	cmd.Flags().StringVar(&content, "content", "", "Document content (Markdown)")
 	cmd.Flags().StringVar(&contentFile, "content-file", "", "Path to file containing content")
-	cmd.MarkFlagRequired("path")
+	_ = cmd.MarkFlagRequired("path")
 	return cmd
 }
 
@@ -171,7 +171,7 @@ func NewUpdateCmd() *cobra.Command {
 	cmd.Flags().StringVar(&path, "path", "", "Document path (required)")
 	cmd.Flags().StringVar(&content, "content", "", "New content (Markdown)")
 	cmd.Flags().StringVar(&contentFile, "content-file", "", "Path to file containing content")
-	cmd.MarkFlagRequired("path")
+	_ = cmd.MarkFlagRequired("path")
 	return cmd
 }
 
@@ -204,7 +204,7 @@ func NewRemoveCmd() *cobra.Command {
 	}
 	cmd.Flags().StringVar(&path, "path", "", "Document path (required)")
 	cmd.Flags().BoolVar(&yesFlag, "yes", false, "Confirm removal")
-	cmd.MarkFlagRequired("path")
+	_ = cmd.MarkFlagRequired("path")
 	return cmd
 }
 

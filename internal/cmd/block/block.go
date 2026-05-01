@@ -94,7 +94,7 @@ func NewUpdateCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&content, "content", "", "New content (Markdown)")
-	cmd.MarkFlagRequired("content")
+	_ = cmd.MarkFlagRequired("content")
 	return cmd
 }
 
@@ -126,7 +126,7 @@ func NewAppendCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&content, "content", "", "Block content (Markdown)")
-	cmd.MarkFlagRequired("content")
+	_ = cmd.MarkFlagRequired("content")
 	return cmd
 }
 
@@ -157,7 +157,7 @@ func NewInsertAfterCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&content, "content", "", "Block content (Markdown)")
-	cmd.MarkFlagRequired("content")
+	_ = cmd.MarkFlagRequired("content")
 	return cmd
 }
 

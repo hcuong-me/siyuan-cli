@@ -3,7 +3,7 @@
 CLI for SiYuan Note written in Go. Search notes, read documents, update content, and export results from the terminal. Built for seamless integration with AI agents, automation workflows, and developer tooling.
 
 ```bash
-siyuan search --content "roadmap" --json
+siyuan-cli search --content "roadmap" --json
 ```
 
 Before running commands, set `SIYUAN_BASE_URL` and `SIYUAN_TOKEN`.
@@ -48,7 +48,7 @@ See [API Reference](docs/siyuan-api.md) for complete SiYuan API documentation.
 
 ```bash
 go install github.com/hcuong-me/siyuan-cli/cmd/siyuan@latest
-siyuan --help
+siyuan-cli --help
 ```
 
 ### Pre-built binary
@@ -88,12 +88,12 @@ If either variable is missing, commands fail with a readable error.
 ## Quick Start
 
 ```bash
-siyuan system version
-siyuan search --content "project alpha"
-siyuan doc get --path /notebook/doc.sy
-siyuan notebook list
-siyuan sql query --statement "SELECT * FROM blocks LIMIT 5"
-siyuan tag list
+siyuan-cli system version
+siyuan-cli search --content "project alpha"
+siyuan-cli doc get --path /notebook/doc.sy
+siyuan-cli notebook list
+siyuan-cli sql query --statement "SELECT * FROM blocks LIMIT 5"
+siyuan-cli tag list
 ```
 
 ## Commands
@@ -131,29 +131,29 @@ See [Command Design Document](docs/command-design.md) for complete command refer
 Search, inspect, then export:
 
 ```bash
-siyuan search --content "roadmap" --json
-siyuan doc get --path /notebook/doc.sy
-siyuan export markdown --id 20260316120000-abc123 --output ./export.md
+siyuan-cli search --content "roadmap" --json
+siyuan-cli doc get --path /notebook/doc.sy
+siyuan-cli export markdown --id 20260316120000-abc123 --output ./export.md
 ```
 
 Attach metadata to a block:
 
 ```bash
-siyuan attr set --id blk-1 --key review-status --value done
-siyuan attr get --id blk-1 --json
+siyuan-cli attr set --id blk-1 --key review-status --value done
+siyuan-cli attr get --id blk-1 --json
 ```
 
 Create a backup before major changes:
 
 ```bash
-siyuan snapshot create --memo "before-reorganization"
-siyuan notebook remove --id old-notebook --yes
+siyuan-cli snapshot create --memo "before-reorganization"
+siyuan-cli notebook remove --id old-notebook --yes
 ```
 
 ## Development
 
 ```bash
-go build -o dist/siyuan ./cmd/siyuan
+go build -o dist/siyuan-cli ./cmd/siyuan
 go test ./... -v -cover
 go vet ./...
 ```

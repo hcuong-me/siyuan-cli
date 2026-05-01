@@ -32,11 +32,11 @@ var (
 // NewRootCmd creates the root command.
 func NewRootCmd() *cobra.Command {
 	root := &cobra.Command{
-		Use:           "siyuan",
+		Use:           "siyuan-cli",
 		Short:         "CLI for SiYuan Note",
 		SilenceErrors: true, // We handle errors ourselves in Execute()
 		SilenceUsage:  true, // Don't show usage on error
-		Long: `siyuan is a CLI tool for SiYuan Note.
+		Long: `siyuan-cli is a CLI tool for SiYuan Note.
 
 Search notes, read documents, update content, and export results from the terminal.
 

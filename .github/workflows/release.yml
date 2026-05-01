@@ -108,6 +108,14 @@ jobs:
     needs: release
     runs-on: ubuntu-latest
     steps:
+      - name: Debug token
+        run: |
+          if [ -n "${{ secrets.HOMEBREW_TAP_TOKEN }}" ]; then
+            echo "Token is set"
+          else
+            echo "Token is NOT set"
+          fi
+
       - name: Get version
         id: get_version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
@@ -156,7 +164,11 @@ jobs:
             end
 
             def install
-              bin.install "siyuan" => "siyuan-cli"
+              if Hardware::CPU.arm?
+                bin.install "siyuan-darwin-arm64" => "siyuan-cli"
+              else
+                bin.install "siyuan-darwin-amd64" => "siyuan-cli"
+              end
             end
 
             test do

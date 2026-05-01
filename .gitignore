@@ -27,6 +27,15 @@ go.work.sum
 # env file
 .env
 
+# Build output
+dist/
+build/
+
 # Editor/IDE
 # .idea/
 # .vscode/
+
+skills-lock.json
+specs/
+.agents/
+.claude/

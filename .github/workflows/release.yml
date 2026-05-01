@@ -165,14 +165,14 @@ jobs:
 
             def install
               if Hardware::CPU.arm?
-                bin.install "siyuan-darwin-arm64" => "siyuan-cli"
+                bin.install "siyuan-darwin-arm64" => "siyuan"
               else
-                bin.install "siyuan-darwin-amd64" => "siyuan-cli"
+                bin.install "siyuan-darwin-amd64" => "siyuan"
               end
             end
 
             test do
-              system "#{bin}/siyuan-cli", "--version"
+              system "#{bin}/siyuan", "--version"
             end
           end
           EOF

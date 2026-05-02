@@ -58,14 +58,14 @@ Download from [GitHub Releases](https://github.com/hcuong-me/siyuan-cli/releases
 ### Homebrew (macOS)
 
 ```bash
-brew tap hcuong-me/siyuan-cli
+brew tap hcuong-me/tap
 brew install siyuan-cli
 ```
 
 Or in one line:
 
 ```bash
-brew install hcuong-me/siyuan-cli/siyuan-cli
+brew install hcuong-me/tap/siyuan-cli
 ```
 
 ## Requirements

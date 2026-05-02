@@ -61,12 +61,16 @@ jobs:
     name: Create Release
     needs: build
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.VERSION }}
+      sha256_arm64: ${{ steps.checksums.outputs.ARM64_SHA }}
+      sha256_amd64: ${{ steps.checksums.outputs.AMD64_SHA }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Get version
         id: get_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
       - name: Download all artifacts
         uses: actions/download-artifact@v4
@@ -87,6 +91,10 @@ jobs:
           for file in siyuan-cli-darwin-*; do
             shasum -a 256 "$file" > "${file}.sha256"
           done
+          AMD64_SHA=$(cat siyuan-cli-darwin-amd64.sha256 | awk '{print $1}')
+          ARM64_SHA=$(cat siyuan-cli-darwin-arm64.sha256 | awk '{print $1}')
+          echo "AMD64_SHA=$AMD64_SHA" >> $GITHUB_OUTPUT
+          echo "ARM64_SHA=$ARM64_SHA" >> $GITHUB_OUTPUT
           ls -la
 
       - name: Create GitHub Release
@@ -103,63 +111,37 @@ jobs:
           name: checksums
           path: release/*.sha256
 
-  update-homebrew:
-    name: Update Homebrew Formula
+  update-homebrew-tap:
+    name: Update Homebrew Tap
     needs: release
     runs-on: ubuntu-latest
     steps:
-      - name: Debug token
-        run: |
-          if [ -n "${{ secrets.HOMEBREW_TAP_TOKEN }}" ]; then
-            echo "Token is set"
-          else
-            echo "Token is NOT set"
-          fi
-
-      - name: Get version
-        id: get_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
-
-      - name: Download checksums
-        uses: actions/download-artifact@v4
-        with:
-          name: checksums
-          path: checksums
-
-      - name: Extract SHA256 values
-        id: sha256
-        run: |
-          AMD64_SHA=$(cat checksums/siyuan-cli-darwin-amd64.sha256 | awk '{print $1}')
-          ARM64_SHA=$(cat checksums/siyuan-cli-darwin-arm64.sha256 | awk '{print $1}')
-          echo "AMD64_SHA=$AMD64_SHA" >> $GITHUB_ENV
-          echo "ARM64_SHA=$ARM64_SHA" >> $GITHUB_ENV
-          echo "amd64: $AMD64_SHA"
-          echo "arm64: $ARM64_SHA"
-
-      - name: Checkout homebrew-tap
+      - name: Checkout homebrew-tap repo
         uses: actions/checkout@v4
         with:
-          repository: hcuong-me/homebrew-siyuan-cli
-          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          repository: hcuong-me/homebrew-tap
+          token: ${{ secrets.TAP_GITHUB_TOKEN }}
           path: homebrew-tap
 
       - name: Update formula
         run: |
-          cat > homebrew-tap/siyuan-cli.rb << 'EOF'
+          mkdir -p homebrew-tap/Formula
+
+          cat > homebrew-tap/Formula/siyuan-cli.rb << 'EOF'
           class SiyuanCli < Formula
             desc "CLI for SiYuan Note"
             homepage "https://github.com/hcuong-me/siyuan-cli"
-            version "${{ env.VERSION }}"
+            version "${{ needs.release.outputs.version }}"
 
             on_macos do
               on_arm do
-                url "https://github.com/hcuong-me/siyuan-cli/releases/download/v${{ env.VERSION }}/siyuan-cli-darwin-arm64"
-                sha256 "${{ env.ARM64_SHA }}"
+                url "https://github.com/hcuong-me/siyuan-cli/releases/download/v${{ needs.release.outputs.version }}/siyuan-cli-darwin-arm64"
+                sha256 "${{ needs.release.outputs.sha256_arm64 }}"
               end
 
               on_intel do
-                url "https://github.com/hcuong-me/siyuan-cli/releases/download/v${{ env.VERSION }}/siyuan-cli-darwin-amd64"
-                sha256 "${{ env.AMD64_SHA }}"
+                url "https://github.com/hcuong-me/siyuan-cli/releases/download/v${{ needs.release.outputs.version }}/siyuan-cli-darwin-amd64"
+                sha256 "${{ needs.release.outputs.sha256_amd64 }}"
               end
             end
 
@@ -177,11 +159,18 @@ jobs:
           end
           EOF
 
-      - name: Commit and push formula
-        run: |
-          cd homebrew-tap
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add siyuan-cli.rb
-          git commit -m "Bump siyuan-cli to v${{ env.VERSION }}"
-          git push
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.TAP_GITHUB_TOKEN }}
+          path: homebrew-tap
+          branch: "siyuan-cli-${{ needs.release.outputs.version }}"
+          title: "siyuan-cli: update to v${{ needs.release.outputs.version }}"
+          body: |
+            Update siyuan-cli formula to version ${{ needs.release.outputs.version }}
+
+            - SHA256 arm64: ${{ needs.release.outputs.sha256_arm64 }}
+            - SHA256 amd64: ${{ needs.release.outputs.sha256_amd64 }}
+            - Release: https://github.com/hcuong-me/siyuan-cli/releases/tag/v${{ needs.release.outputs.version }}
+          commit-message: "siyuan-cli: update to v${{ needs.release.outputs.version }}"
+          delete-branch: true

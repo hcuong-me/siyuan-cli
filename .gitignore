@@ -39,3 +39,6 @@ skills-lock.json
 specs/
 .agents/
 .claude/
+.mimocode/
+.codex/
+thoughts/

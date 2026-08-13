@@ -60,18 +60,14 @@ func (l *ExportLogic) ExportHTML(ctx context.Context, docID, outputPath string) 
 
 // ExportPDF exports a document as PDF.
 func (l *ExportLogic) ExportPDF(ctx context.Context, docID, outputPath string) (*siyuan.ExportPDFResponse, error) {
-	// PDF is saved on the server, we need to get it
-	// Use a temp path, then read the file
-	resp, err := l.client.ExportPDF(ctx, docID, "/tmp")
+	// PDF is saved on the SiYuan server. Preserve the caller's server-owned
+	// save path instead of silently replacing it with a local temp directory.
+	if outputPath == "" {
+		outputPath = "/tmp"
+	}
+	resp, err := l.client.ExportPDF(ctx, docID, outputPath)
 	if err != nil {
 		return nil, err
-	}
-
-	// If outputPath is specified, we need to read the server file and write locally
-	if outputPath != "" {
-		// Note: The PDF is on the server, we would need a file download API
-		// For now, just return the server path
-		fmt.Printf("PDF exported to server path: %s\n", resp.Path)
 	}
 
 	return resp, nil
@@ -79,15 +75,14 @@ func (l *ExportLogic) ExportPDF(ctx context.Context, docID, outputPath string) (
 
 // ExportDocx exports a document as DOCX.
 func (l *ExportLogic) ExportDocx(ctx context.Context, docID, outputPath string) (*siyuan.ExportDocxResponse, error) {
-	// DOCX is saved on the server
-	resp, err := l.client.ExportDocx(ctx, docID, "/tmp")
+	// DOCX is saved on the SiYuan server. Preserve the caller's server-owned
+	// save path instead of silently replacing it with a local temp directory.
+	if outputPath == "" {
+		outputPath = "/tmp"
+	}
+	resp, err := l.client.ExportDocx(ctx, docID, outputPath)
 	if err != nil {
 		return nil, err
-	}
-
-	// Note: The DOCX is on the server, we would need a file download API
-	if outputPath != "" {
-		fmt.Printf("DOCX exported to server path: %s\n", resp.Path)
 	}
 
 	return resp, nil

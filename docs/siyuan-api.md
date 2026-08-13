@@ -4,7 +4,7 @@ Complete API reference for SiYuan Note. Base URL: `http://127.0.0.1:6806`
 
 ## Authentication
 
-All API requests require authentication via the `Authorization` header:
+Authenticate all requests with the `Authorization` header:
 
 ```
 Authorization: Token {your-api-token}
@@ -213,8 +213,10 @@ POST /api/notebook/setNotebookConf
 
 ### List Document Tree
 
+The CLI resolves the notebook selector (an ID or an exact name), then walks `/api/filetree/listDocsByPath` from the root to list the notebook's document tree, one directory level per request. The CLI enforces `context.list_documents.max_depth` locally during traversal and never sends it as a server list-count parameter. The response includes the resolved notebook, the node count, and the document tree.
+
 ```http
-POST /api/filetree/listDocTree
+POST /api/filetree/listDocsByPath
 ```
 
 **Body:**
@@ -520,7 +522,7 @@ POST /api/query/sql
 }
 ```
 
-**Security:** Only SELECT queries are allowed.
+**Security:** The API accepts only SELECT queries.
 
 ---
 
@@ -551,9 +553,13 @@ POST /api/filetree/searchDocs
 ```json
 {
   "k": "keyword",
-  "box": "notebook-id"
+  "notebook": "notebook-id",
+  "path": "/Projects"
 }
 ```
+
+The CLI returns the complete result set with a count. The `context.search_documents`
+contract omits pagination fields.
 
 ---
 
@@ -711,16 +717,11 @@ POST /api/file/getFile
 
 ```http
 POST /api/file/putFile
+Content-Type: multipart/form-data
 ```
 
-**Body:**
-```json
-{
-  "path": "/data/storage/file.md",
-  "content": "File content",
-  "isDir": false
-}
-```
+**Form fields:** `path` (server path), `content` (file bytes as a text field),
+and `isDir` (`true` or `false`). The CLI sends multipart form data rather than JSON.
 
 ### Remove File
 
@@ -861,16 +862,17 @@ POST /api/notification/pushErrMsg
 POST /api/repo/getRepoSnapshots
 ```
 
-### Get Current Snapshot
-
-```http
-POST /api/repo/getRepoSnapshot
+**Body:**
+```json
+{
+  "page": 1
+}
 ```
 
 ### Create Snapshot
 
 ```http
-POST /api/repo/createRepoSnapshot
+POST /api/repo/createSnapshot
 ```
 
 **Body:**
@@ -884,19 +886,6 @@ POST /api/repo/createRepoSnapshot
 
 ```http
 POST /api/repo/checkoutRepo
-```
-
-**Body:**
-```json
-{
-  "id": "snapshot-id"
-}
-```
-
-### Remove Snapshot
-
-```http
-POST /api/repo/removeRepoSnapshot
 ```
 
 **Body:**

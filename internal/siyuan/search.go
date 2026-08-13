@@ -32,9 +32,9 @@ type SearchBlock struct {
 // FullTextSearchBlock performs full-text search on blocks.
 func (c *Client) FullTextSearchBlock(ctx context.Context, keyword string, page, size int) (*SearchBlockResult, error) {
 	req := map[string]interface{}{
-		"k":    keyword,
-		"page": page,
-		"size": size,
+		"query":    keyword,
+		"page":     page,
+		"pageSize": size,
 	}
 
 	resp, err := c.Post(ctx, "/api/search/fullTextSearchBlock", req)
@@ -51,6 +51,7 @@ func (c *Client) FullTextSearchBlock(ctx context.Context, keyword string, page, 
 
 // SearchDocResult represents a document search result.
 type SearchDocResult struct {
+	ID      string `json:"id,omitempty"`
 	Box     string `json:"box"`
 	BoxIcon string `json:"boxIcon"`
 	HPath   string `json:"hPath"`

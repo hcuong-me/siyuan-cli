@@ -2,9 +2,11 @@
 package main
 
 import (
-	"siyuan/internal/cmd"
+	"os"
+
+	"siyuan/internal/human"
 )
 
 func main() {
-	cmd.Execute()
+	os.Exit(human.Execute(os.Args[1:], os.Stdin, os.Stdout))
 }

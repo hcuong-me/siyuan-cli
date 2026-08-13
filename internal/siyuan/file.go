@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strconv"
 )
 
 // FileInfo represents a file or directory entry.
@@ -39,28 +40,25 @@ func (c *Client) GetFile(ctx context.Context, path string) (string, error) {
 		"path": path,
 	}
 
-	resp, err := c.Post(ctx, "/api/file/getFile", req)
+	// getFile returns the file content as the raw response body.
+	content, err := c.PostRaw(ctx, "/api/file/getFile", req)
 	if err != nil {
 		return "", err
 	}
-
-	var content string
-	if err := json.Unmarshal(resp.Data, &content); err != nil {
-		// Return raw data if not valid JSON string
-		return string(resp.Data), nil
+	var decoded string
+	if err := json.Unmarshal(content, &decoded); err == nil {
+		return decoded, nil
 	}
-	return content, nil
+	return string(content), nil
 }
 
 // PutFile writes content to a file.
 func (c *Client) PutFile(ctx context.Context, path string, content string, isDir bool) error {
-	req := map[string]interface{}{
+	_, err := c.postMultipart(ctx, "/api/file/putFile", map[string]string{
 		"path":    path,
+		"isDir":   strconv.FormatBool(isDir),
 		"content": content,
-		"isDir":   isDir,
-	}
-
-	_, err := c.Post(ctx, "/api/file/putFile", req)
+	})
 	return err
 }
 

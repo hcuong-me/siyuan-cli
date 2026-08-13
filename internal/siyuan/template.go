@@ -45,18 +45,12 @@ func (c *Client) GetTemplate(ctx context.Context, path string) (string, error) {
 		"path": path,
 	}
 
-	resp, err := c.Post(ctx, "/api/file/getFile", req)
+	// getFile returns the file content as the raw response body.
+	content, err := c.PostRaw(ctx, "/api/file/getFile", req)
 	if err != nil {
 		return "", err
 	}
-
-	// getFile returns the content directly as a string in data
-	var content string
-	if err := json.Unmarshal(resp.Data, &content); err != nil {
-		// Try to return as raw string if unmarshal fails
-		return string(resp.Data), nil
-	}
-	return content, nil
+	return string(content), nil
 }
 
 // RenderTemplate renders a template file and returns the result.

@@ -83,19 +83,3 @@ func (c *Client) RemoveTag(ctx context.Context, label string) error {
 	_, err := c.Post(ctx, "/api/tag/removeTag", req)
 	return err
 }
-
-// GetDocsByTag retrieves documents that have a specific tag.
-func (c *Client) GetDocsByTag(ctx context.Context, label string) ([]string, error) {
-	req := map[string]string{"label": label}
-
-	resp, err := c.Post(ctx, "/api/tag/getDocsByTag", req)
-	if err != nil {
-		return nil, err
-	}
-
-	var result []string
-	if err := json.Unmarshal(resp.Data, &result); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal docs by tag: %w", err)
-	}
-	return result, nil
-}

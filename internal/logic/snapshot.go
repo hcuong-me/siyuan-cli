@@ -52,46 +52,14 @@ func (l *SnapshotLogic) List(ctx context.Context) ([]Snapshot, error) {
 	return snapshots, nil
 }
 
-// Current returns the current snapshot.
-func (l *SnapshotLogic) Current(ctx context.Context) (*Snapshot, error) {
-	info, err := l.client.GetCurrentSnapshot(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Snapshot{
-		ID:      info.ID,
-		Memo:    info.Memo,
-		Created: info.Created,
-		Count:   info.Count,
-		Size:    info.Size,
-	}, nil
-}
-
 // Create creates a new snapshot.
-func (l *SnapshotLogic) Create(ctx context.Context, memo string) (*Snapshot, error) {
-	info, err := l.client.CreateSnapshot(ctx, memo)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Snapshot{
-		ID:      info.ID,
-		Memo:    info.Memo,
-		Created: info.Created,
-		Count:   info.Count,
-		Size:    info.Size,
-	}, nil
+func (l *SnapshotLogic) Create(ctx context.Context, memo string) error {
+	return l.client.CreateSnapshot(ctx, memo)
 }
 
 // Restore restores to a specific snapshot.
 func (l *SnapshotLogic) Restore(ctx context.Context, id string) error {
 	return l.client.RestoreSnapshot(ctx, id)
-}
-
-// Remove removes a snapshot.
-func (l *SnapshotLogic) Remove(ctx context.Context, id string) error {
-	return l.client.RemoveSnapshot(ctx, id)
 }
 
 // ValidateSnapshotID checks if the ID is valid.

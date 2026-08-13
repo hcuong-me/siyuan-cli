@@ -40,8 +40,3 @@ func (l *TagLogic) Rename(ctx context.Context, oldLabel, newLabel string) error 
 func (l *TagLogic) Remove(ctx context.Context, label string) error {
 	return l.client.RemoveTag(ctx, label)
 }
-
-// GetDocsByTag returns documents with a specific tag.
-func (l *TagLogic) GetDocsByTag(ctx context.Context, label string) ([]string, error) {
-	return l.client.GetDocsByTag(ctx, label)
-}

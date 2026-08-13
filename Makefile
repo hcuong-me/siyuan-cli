@@ -1,28 +1,39 @@
-.PHONY: build test lint clean install
+.PHONY: all build test test-coverage test-integration lint lint-arch clean install build-all
 
 BINARY_NAME := siyuan-cli
 BUILD_DIR := ./dist
+BINARY := $(BUILD_DIR)/$(BINARY_NAME)
 MAIN_PACKAGE := ./cmd/siyuan
+# Install prefix; the binary is copied to $(PREFIX)/bin
+PREFIX ?= /usr/local
+
+all: build
 
 build:
-	go build -o $(BUILD_DIR)/$(BINARY_NAME) $(MAIN_PACKAGE)
+	go build -o $(BINARY) $(MAIN_PACKAGE)
 
 test:
-	go test ./... -v -race
+	SIYUAN_INTEGRATION_TEST=0 go test ./... -v -race
 
 test-coverage:
-	go test ./... -race -coverprofile=coverage.out
+	SIYUAN_INTEGRATION_TEST=0 go test ./... -race -coverprofile=coverage.out
 	go tool cover -html=coverage.out -o coverage.html
+
+test-integration:
+	SIYUAN_INTEGRATION_TEST=1 go test ./... -v -race
 
 lint:
 	golangci-lint run ./...
 
-clean:
-	rm -rf $(BUILD_DIR)
-	rm -f coverage.out coverage.html
+lint-arch:
+	go run scripts/lint-deps.go
+	go run scripts/lint-quality.go
 
-install:
-	go install $(MAIN_PACKAGE)
+clean:
+	rm -rf $(BUILD_DIR) coverage.out coverage.html
+
+install: build
+	cp $(BINARY) $(PREFIX)/bin/$(BINARY_NAME)
 
 # Cross-compilation builds
 build-all:

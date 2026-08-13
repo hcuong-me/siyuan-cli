@@ -31,8 +31,8 @@ func NewDocumentLogic() (*DocumentLogic, error) {
 }
 
 // ListTree returns the document tree for a notebook with names populated.
-func (l *DocumentLogic) ListTree(ctx context.Context, notebookID string, maxListCount int) ([]DocumentInfo, error) {
-	treeResp, err := l.client.ListDocTree(ctx, notebookID, maxListCount)
+func (l *DocumentLogic) ListTree(ctx context.Context, notebookID string, maxDepth int) ([]DocumentInfo, error) {
+	treeResp, err := l.client.ListDocTree(ctx, notebookID, maxDepth)
 	if err != nil {
 		return nil, err
 	}
@@ -82,6 +82,9 @@ func (l *DocumentLogic) Get(ctx context.Context, notebookID, path string) (*siyu
 	if len(ids) == 0 {
 		return nil, fmt.Errorf("document not found: %s", path)
 	}
+	if len(ids) > 1 {
+		return nil, fmt.Errorf("document path is ambiguous: %s (%d matches)", path, len(ids))
+	}
 
 	// Get content
 	return l.client.GetDocumentContent(ctx, ids[0])
@@ -101,6 +104,9 @@ func (l *DocumentLogic) Update(ctx context.Context, notebookID, path, markdown s
 	}
 	if len(ids) == 0 {
 		return fmt.Errorf("document not found: %s", path)
+	}
+	if len(ids) > 1 {
+		return fmt.Errorf("document path is ambiguous: %s (%d matches)", path, len(ids))
 	}
 
 	// Append block

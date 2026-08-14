@@ -12,6 +12,8 @@ import (
 )
 
 func TestWrite(t *testing.T) {
+	t.Setenv("SIYUAN_TOKEN", "test-token")
+	t.Setenv("SIYUAN_BASE_URL", "http://127.0.0.1:6806")
 	var output bytes.Buffer
 	request := `{"version":"v1","operation":"update_block","input":{"block_id":"b","content":"x"},"mode":"apply"}`
 	if code := Execute([]string{"write"}, strings.NewReader(request), &output); code == 0 {
@@ -21,6 +23,8 @@ func TestWrite(t *testing.T) {
 }
 
 func TestOrganize(t *testing.T) {
+	t.Setenv("SIYUAN_TOKEN", "test-token")
+	t.Setenv("SIYUAN_BASE_URL", "http://127.0.0.1:6806")
 	var output bytes.Buffer
 	request := `{"version":"v1","operation":"delete_block","input":{"block_id":"b"},"mode":"apply"}`
 	if code := Execute([]string{"organize"}, strings.NewReader(request), &output); code == 0 {
@@ -30,6 +34,8 @@ func TestOrganize(t *testing.T) {
 }
 
 func TestMaintain(t *testing.T) {
+	t.Setenv("SIYUAN_TOKEN", "test-token")
+	t.Setenv("SIYUAN_BASE_URL", "http://127.0.0.1:6806")
 	var output bytes.Buffer
 	request := `{"version":"v1","operation":"remove_file","input":{"path":"/x"},"mode":"apply"}`
 	if code := Execute([]string{"maintain"}, strings.NewReader(request), &output); code == 0 {
